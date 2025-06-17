@@ -1,0 +1,101 @@
+3.	Design Deploy and Manage Microservice Architecture using Docker
+Aim: To simulate deployment of basic microservice 
+Pre-reuisite: docker desktop has to be installed on system
+Steps:
+STAY IN DESKTOP
+If docker desktop is not downloaded download it(choose 64 bit), mostly it will be downloaded, if its not ask them for internet connection
+Go to this on google browser: https://hub.docker.com/signup
+Docker hub account: username:1by22cs194@bmsit.in
+                                      Password:kinsella1234$
+Then go to file explorer create folder microservice-app
+Inside app folder:
+1.	
+2.	App. Py (a in small):
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Microservice App!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+2.Requirements.txt(r in small):
+flask
+ 3.DockerFile
+FROM python:3.9
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "app.py"]
+Then one more file (not in app folder)
+docker-compose.yml
+version: '3'
+
+services:
+  web:
+    build: ./app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: sampledb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+
+And one empty file db (not under anything)
+In vs code terminal run:
+docker compose up –build
+ you will get one link go to that link:Hello From Microservice App!
+Now if you go on docker desktop click on containers you should see all this
+docker-compose down
+YOU CAN STOP HERE. IF MA’AM TELLS ANYTHING JUST TELL HER IT WAS GIVEN TILL HERE IN MAUAL, IF MORE TIME IS THERE THEN DO OTHER STEPS.
+Next step, is pushing to docker hub
+Click start-type cmd
+cd path\to\microservice-app
+docker build -t yourusername/microservice-app ./app (username is 1BY22CS194)
+docker login
+docker push yourusername/microservice-app
+YOU CAN ALSO RUN IT ON YOUR VS CODE TERMINAL
+MAKE SURE DOCKER DESKTOP IS RUNNING BEFORE THIS: GO TO START->DOCKER DESKTOP->OPEN IT->WAIT UNTIL IT IS SAYING “Docker Engine is running”
+Then go to docker hub repository:
+Go to this link: https://hub.docker.com/
+Login into your account
+Click your username->repositories
+Your microservice app respository should be located inside your account
+Viva:
+docker-compose up --build Builds and starts all services defined in the Compose file
+docker ps Lists all running containers (for verification)
+docker-compose down Stops and removes all containers, networks, and volumes created
+NOW SEE IN CASE WINDOWS DOES NOT HAVE DOCKER DESKTOP
+USE UBUNTU
+STEPS:
+1.Open ubuntu in VMWare
+2.Install Docker+ Compose in Ubuntu
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo systemctl start docker
+sudo systemctl enable docker
+3.	Check Docker
+docker –version
+docker compose version
+4.	Then do same project folder in vs code
+5.	In ubuntu terminal run:
+docker compose up –build
+Running on http://0.0.0.0:5000
+Go to ubuntu firefox and put it
+THIS IS MUCH EASIER IS MA’AM ACCEPTS DO THIS
+IF YOU HAVE TO PUSH TO DOCKER HUB FROM UBUNTU:
+docker build -t yourusername/microservice-app ./app
+docker login
+docker push yourusername/microservice-app
