@@ -1,0 +1,68 @@
+2.	Docker Installation and Deployment
+Method 1: In ubuntu terminal
+Okay first make sure vs code is installed(steps are given in above program start)
+Now in terminal put these commands to install docker(we need internet connection):
+sudo apt update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+Check if docker is installed:
+sudo docker –version
+Next, try ubuntu image:
+sudo docker run -it ubuntu
+type ls
+exit
+Manage containers:
+sudo docker ps -a #show all containers
+sudo docker rmi <name>  # Remove an image
+Then in files create a new folder:flask-docker
+Inside that in vs code:
+App.py: (a is in small)
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Docker!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+requirements.txt:
+flask
+Dockerfile:
+FROM python:3.8-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+The build and run(put in ubuntu terminal):
+cd flask-docker #go to that folder #make sure you copy correct path otherwise it will say no such file exists.
+sudo docker build -t flask-app . #if it doesn’t work add sudo before docker
+sudo docker run -d -p 5000:5000 flask-app
+You will see: http://localhost:5000 paste this link in file explorer->google(if you want)
+
+Method 2: Now suppose there is docker desktop, okay so everything will happen in windows and not ubuntu
+  First check if docker desktop is running:
+Open terminal(you can use vs code terminal or regular terminal) and run:
+systemctl start docker  #add sudo first if its not working
+Then open vs code on desktop, do everything same as before
+Then open terminal in vs code and put this:
+docker build -t flask-app
+docker run -d -p 5000:5000 flask-app
+Open firefox and go to the same link as above.
+If you want to see the blue white box open docker desktop:
+And in containers tab and images tab you should see it.
+If container is not running rerun on terminal: 
+docker ps -a
+docker start <container_id_or_name>
+docker ps
+This is your path in vs code terminal:
+cd ~/Desktop/flask-docker
+You don’t have to keep this open from start.
+For viva:
+docker ps -a             # See all containers
+docker stop <id>         # Stop a running container
+docker rm <id>           # Remove container
+docker images            # View images
+docker rmi <image-name>  # Delete image
