@@ -1,0 +1,116 @@
+5.	Maven Project
+1.	Download Java SDK
+Go to: https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html
+•  Download the Windows x64 Installer (e.g., jdk-21_windows-x64_bin.exe)
+•  Install it using the installer (just click Next → Next → Done)
+2.	In Command Prompt check java version
+java -version
+java version "21.0.1" ...
+3.	Install Apache Maven
+Go to: https://maven.apache.org/download.cgi
+Scroll down and click on the link:
+apache-maven-3.9.6-bin.zip
+It will start downloading the ZIP file
+Don’t download:
+•	src.zip → source code, not needed
+•	.tar.gz → for Linux/Unix, not Windows
+4.	Extract the zip file
+Once the .zip is downloaded:
+•	Right-click on it → Extract All
+Extract it to a permanent folder like:
+C:\Program Files\Apache\Maven\apache-maven-3.9.6
+Set Environment Variables:
+•  Search “Environment Variables” in Windows → Open
+•  Under System Variables → Click New:
+•	Name: MAVEN_HOME
+•	Value: C:\Program Files\Apache\Maven\apache-maven-3.9.6
+•  Find Path → Click Edit → Add:
+C:\Program Files\Apache\Maven\apache-maven-3.9.6\bin
+OR
+Run command promp as adminstartor
+setx MAVEN_HOME "C:\Program Files\Apache\Maven\apache-maven-3.9.6" /M
+setx PATH "%PATH%;C:\Program Files\Apache\Maven\apache-maven-3.9.6\bin" /M
+If it works you will see:
+SUCCESS: Specified value was saved.
+Then close the window
+Open command prompt again normally
+mvn -v
+output:
+Apache Maven 3.9.6
+Java version: 21.0.1
+5.	Verify maven installation
+In command prompt:
+mvn -v
+6.	Create a maven project
+Run this in command prompt(don’t make it manually) normal only or just put cmd in start
+mvn archetype:generate -DgroupId=com.example -DartifactId=demo-project -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+This will create a folder demo-project with Java files.
+To find location path of this now:
+cd demo-project
+cd
+cd %cd%
+explorer . 
+This will open the demo-project folder in File Explorer.
+Open in VS Code
+1.	Go to the File Explorer window that just opened
+2.	Right-click on the white space
+3.	Choose "Open with Code"
+🟡 If you don’t see "Open with Code":
+•	Open VS Code
+•	Go to File → Open Folder
+•	Navigate to the folder you just found and open demo-project
+Find and edit the app.java file:
+ 
+Pox.xml will also be there
+Paste this is App.java:
+package com.example;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println("✅ Hello from Maven Project!");
+    }
+}
+7.	Build and run the project
+In vs code terminal
+mvn compile
+mvn package
+Run the JAR FILE
+java -cp target/demo-project-1.0-SNAPSHOT.jar com.example.App
+Output:
+✅ Hello from Maven Project!
+You can use any text editor like notepad.
+IF YOU WANT TO CREATE THE FILE MANUALLY IN VS CODE MAINTAIN THIS STRUCTURE:
+ 
+And in pox.xml put this:
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>demo-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+App.java will be same as previous method
+Compile and run in same way:
+mvn compile
+mvn package
+java -cp target/demo-project-1.0-SNAPSHOT.jar com.example.App
+
+
+
