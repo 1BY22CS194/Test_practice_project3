@@ -1,0 +1,215 @@
+4.	Jenkins CI/CD Pipeline Integration with SonarQube for Static Code Analysis
+Open Fedora(it should be in VMWare just like ubuntu)
+1.	Install JAVA
+sudo dnf install java-11-openjdk-devel
+java -version
+2.Install and configure SonarQube
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.1.78527.zip
+unzip sonarqube-10.2.1.78527.zip
+sudo mv sonarqube-10.2.1.78527 /opt/sonarqube
+Start SonarQube
+cd /opt/sonarqube/bin/linux-x86-64/
+./sonar.sh start
+If it fails:
+./sonar.sh console
+Now access SonarQube
+http://localhost:9000
+default login:admin
+password:admin
+After first login it will ask you to set new password so make it: admin123
+Open Ports in Fedora Firewall:
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --permanent --add-port=9000/tcp
+sudo firewall-cmd –reload
+Get Jenkins Intitial Admin Password
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+On firefox open link: http://localhost:8080
+You’ll see a screen like “Unlock Jenkins” It asks for initial admin password.
+We need to get admin password from fedora terminal so put:
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+You will get some long password like this:
+a18c9e39077f4b05b7e76b8e1c2a64e9
+Copy it and paste it into that browser and click on continue.
+Then junkins will ask to install suggested plugins
+Let it finish installing.
+Then create admin user put anything you want and finish the set up.
+Now you’ll land on Jenkins dashboard.
+Now we need to install SonarQube scanner plugin
+In Jenkins dashboard, click on manage Jenkins. Then click Manage Plugins.
+Go to available tab(you have to be connected to internet)
+And search for:
+SonarQube Scanner
+Check it->click install without restart
+After installation->click restart junkins if prompted.
+Next we need to add SonarQube server in Jenkins:
+•  Jenkins → Manage Jenkins
+•  Click Configure System
+•  Scroll down to SonarQube Servers
+•  Click Add SonarQube
+Now fill the details:
+Field	What to Fill
+Name	My SonarQube Server (or any name)
+Server URL	http://localhost:9000
+Token	Get this from SonarQube site
+
+How to generate the token:
+•	Go to http://localhost:9000 → Login (admin / admin)
+•	Click your user → My Account → Security → Generate Token
+•	Copy the token and paste it in Jenkins
+✅ Click Save!
+Next create a pipeline job
+Next create a local project folder
+In terminal in fedora put this:
+mkdir ~/myproject
+cd ~/myproject
+mkdir src
+echo "console.log('Hello from Sonar!');" > src/app.js
+Still inside ~/myproject, run:
+nano sonar-project.properties
+paste this:
+sonar.projectKey=myproject
+sonar.sources=src
+sonar.host.url=http://localhost:9000
+sonar.login=YOUR_TOKEN_HERE
+Replace YOUR_TOKEN_HERE with the token you generated from SonarQube.
+Press Ctrl + O → Enter
+•	Press Ctrl + X to exit
+•	•  Open browser → go to:
+•	http://localhost:8080
+•	•  Click New Item
+•	•  Enter myproject → select Freestyle Project
+•  Click OK
+Configure Jenkins Job
+In Jenkins job settings:
+1.	Leave Source Code Management blank
+2.	Scroll to Build
+3.	Click Add Build Step → Execute SonarQube Scanner
+4.	Scroll down → Click Save
+Run the Job
+On the left side click: Build Now
+View Results in SonarQube:
+http://localhost:9000
+IF YOU WANT TO USE UBUNTU:
+Install Java
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+java -version
+Install SonarQube
+sudo apt install wget unzip -y
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.1.78527.zip
+unzip sonarqube-10.2.1.78527.zip
+sudo mv sonarqube-10.2.1.78527 /opt/sonarqube
+cd /opt/sonarqube/bin/linux-x86-64/
+./sonar.sh start
+If it fails:
+./sonar.sh console
+Access SonarQube in Browser
+http://localhost:9000
+•	Login: admin
+•	Password: admin
+•	Change password to: admin123
+Install Jenkin on Ubuntu
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl enable Jenkins
+Get Jenkins Admin Password
+http://localhost:8080
+Paste that password into:
+http://localhost:8080
+•	Continue → Install Suggested Plugins
+•	Create admin user → any name/password
+•	Done ✅
+Install SonarQube Scanner Plugin
+1.	Jenkins → Manage Jenkins → Manage Plugins
+2.	Go to Available tab
+3.	Search for SonarQube Scanner
+4.	Check → Install without restart
+5.	Restart if asked
+dd SonarQube Server in Jenkins
+•	Jenkins → Manage Jenkins → Configure System
+•	Scroll to SonarQube Servers
+•	Click Add SonarQube
+Fill:
+Field	Value
+Name	My SonarQube Server
+Server URL	http://localhost:9000
+Token	From SonarQube → My Account → Security → Generate Token
+✅ Click Save
+Create Local Project Folder
+In ubuntu terminal:
+mkdir ~/myproject
+cd ~/myproject
+mkdir src
+echo "console.log('Hello from Sonar!');" > src/app.js
+nano sonar-project.properties
+paste this:
+sonar.projectKey=myproject
+sonar.sources=src
+sonar.host.url=http://localhost:9000
+sonar.login=YOUR_TOKEN_HERE
+Replace YOUR_TOKEN_HERE with the token from SonarQube
+Save: Ctrl + O, Enter → Ctrl + X to exit
+Create Jenkins Job (Freestyle)
+1.	Jenkins → New Item
+2.	Name: myproject
+3.	Type: Freestyle Project
+4.	Click OK
+
+Configure Job
+•	Leave Source Code blank
+•	Go to Build → Click Add Build Step
+•	Choose: Execute SonarQube Scanner
+•	Save
+
+Run the Job
+•	Click Build Now
+
+View SonarQube Report
+Go to:
+http://localhost:9000
+Click myproject
+✅ You'll see bugs, code smells, etc.
+
+5.	Maven Project
+1.	Download Java SDK
+Go to: https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html
+•  Download the Windows x64 Installer (e.g., jdk-21_windows-x64_bin.exe)
+•  Install it using the installer (just click Next → Next → Done)
+2.	In Command Prompt check java version
+java -version
+java version "21.0.1" ...
+3.	Install Apache Maven
+Go to: https://maven.apache.org/download.cgi
+Scroll down and click on the link:
+apache-maven-3.9.6-bin.zip
+It will start downloading the ZIP file
+Don’t download:
+•	src.zip → source code, not needed
+•	.tar.gz → for Linux/Unix, not Windows
+4.	Extract the zip file
+Once the .zip is downloaded:
+•	Right-click on it → Extract All
+Extract it to a permanent folder like:
+C:\Program Files\Apache\Maven\apache-maven-3.9.6
+Set Environment Variables:
+•  Search “Environment Variables” in Windows → Open
+•  Under System Variables → Click New:
+•	Name: MAVEN_HOME
+•	Value: C:\Program Files\Apache\Maven\apache-maven-3.9.6
+•  Find Path → Click Edit → Add:
+C:\Program Files\Apache\Maven\apache-maven-3.9.6\bin
+OR
+Run command promp as adminstartor
+setx MAVEN_HOME "C:\Program Files\Apache\Maven\apache-maven-3.9.6" /M
+setx PATH "%PATH%;C:\Program Files\Apache\Maven\apache-maven-3.9.6\bin" /M
+If it works you will see:
+SUCCESS: Specified value was saved.
+Then close the window
+Open command prompt again normally
+mvn -v
+output:
+Apache Maven 3.9.6
+Java version: 21.0.1
