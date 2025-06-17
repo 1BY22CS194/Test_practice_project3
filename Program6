@@ -1,0 +1,48 @@
+6.	Build and Run a Java Application with Maven. Migrate the same Application to Gradle. Create a Maven Project. Understand the POM file, Dependency Management and Plugins.
+First do program 5 that is only part 1
+Part 2:
+Install Gradle:
+Link: https://gradle.org/releases/
+Download binary-only ZIP
+•  Extract to:
+C:\Gradle\gradle-8.7 (or whatever version you downloaded)
+Set environment variables (command prompt as admintrator):
+setx GRADLE_HOME "C:\Gradle\gradle-8.7" /M
+setx PATH "%PATH%;%GRADLE_HOME%\bin" /M
+ Restart CMD and check:
+gradle -v
+
+Delete pox.xml file
+del pom.xml
+
+Create build.gradle in demo-project/
+plugins {
+    id 'java'
+}
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+Create settings.gradle:
+rootProject.name = 'demo-project'
+
+Folder structure should know look like:
+ 
+Build and Run using Gradle
+In VS Code Terminal:
+gradle build
+java -cp build/libs/demo-project-1.0-SNAPSHOT.jar com.example.App
+Output:
+✅ Hello from Maven Project!
