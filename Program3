@@ -9,9 +9,10 @@ Docker hub account: username:1by22cs194@bmsit.in
                                       Password:kinsella1234$
 Then go to file explorer create folder microservice-app
 Inside app folder:
-1.	
-2.	App. Py (a in small):
+1. App. Py (a in small):
+# File: app/app.py
 from flask import Flask
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -21,19 +22,23 @@ def home():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
+
 2.Requirements.txt(r in small):
 flask
  3.DockerFile
+# File: app/Dockerfile
 FROM python:3.9
+
 WORKDIR /app
+
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "app.py"]
-Then one more file (not in app folder)
-docker-compose.yml
-version: '3'
 
+COPY . .
+
+CMD ["python", "app.py"]
+In seprate folder/file put this:docker-compose.yml
+version: '3'
 services:
   web:
     build: ./app
@@ -53,10 +58,11 @@ services:
     ports:
       - "3306:3306"
 
-And one empty file db (not under anything)
 In vs code terminal run:
-docker compose up –build
- you will get one link go to that link:Hello From Microservice App!
+sudo docker compose up --build
+ you will get some long mssage
+go to this link:http://localhost:5000/
+that's it
 Now if you go on docker desktop click on containers you should see all this
 docker-compose down
 YOU CAN STOP HERE. IF MA’AM TELLS ANYTHING JUST TELL HER IT WAS GIVEN TILL HERE IN MAUAL, IF MORE TIME IS THERE THEN DO OTHER STEPS.
